@@ -1,12 +1,12 @@
 import os
-import numpy as np
+import matplotlib.pyplot as plt
 from torchvision.io import read_image
 import torch
 import pandas as pd
 
-imgs_path = "Images"
-feats_path = "Features"
-target_shape=(3, 84, 63) # <- HIER EINSTELLEN z.b. (3, 504, 378), (3, 252, 189),(3, 84, 63)
+#imgs_path = "Images"
+#feats_path = "Features"
+#target_shape = (3, 84, 63) # <- HIER EINSTELLEN z.b. (3, 504, 378), (3, 252, 189),(3, 84, 63)
 
 def run(imgs_path="Images", feats_path="Features", target_shape=(3, 84, 63)):
     feats = []
@@ -16,15 +16,20 @@ def run(imgs_path="Images", feats_path="Features", target_shape=(3, 84, 63)):
         os.makedirs(feats_path)
 
     for findex, file in enumerate(files):
+        if file == "0.png":
+            continue
         filepath = os.path.join(imgs_path, file)
         image = read_image(filepath)
         scale_factor = target_shape[1] / image.shape[1]
         image = torch.nn.functional.interpolate(image.unsqueeze(0).float(), scale_factor=scale_factor,
                                                 mode="bilinear").int().squeeze()
-        feat = file.replace(".jpg", ".pt")
-        print("progress:", findex / len(files), image.shape, image.shape == target_shape, )
-        torch.save(image, os.path.join(feats_path, feat))
+
+        image = image.float().mean(0).int().unsqueeze(0)
+        feat = file.lower().replace(".jpg", ".pt")
+
+        print("progress:", findex / len(files), image.shape, target_shape, image.shape == target_shape, end="\r")
         if image.shape == target_shape:
+            torch.save(image, os.path.join(feats_path, feat))
             feats.append(feat)
 
         df = pd.DataFrame({"feats": feats})
@@ -39,7 +44,13 @@ if __name__ == "__main__":
     parser.add_argument('--feats_path', type=str, help='path to feature foler')
     parser.add_argument("--img_size", type=int, default=84, help="size of each image dimension")
     parser.add_argument("--img_width", type=int, default=63, help="size of each image dimension")
+    parser.add_argument("--no_color", action="store_true", help="size of each image dimension")
     args = parser.parse_args()
 
-    target_shape = (3, args.img_size, args.img_width)
+    if args.no_color:
+        d=1
+    else:
+        d=3
+
+    target_shape = (d, args.img_size, args.img_width)
     run(args.imgs_path, args.feats_path, target_shape)

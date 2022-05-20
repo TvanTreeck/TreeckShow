@@ -12,7 +12,9 @@ import torch.nn as nn
 
 import torch
 
-os.makedirs("images", exist_ok=True)
+# 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
+
+os.makedirs("predictions", exist_ok=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--n_epochs", type=int, default=200, help="number of epochs of training")
@@ -30,16 +32,16 @@ parser.add_argument("--sample_interval", type=int, default=400, help="interval b
 opt = parser.parse_args()
 
 opt = argparse.Namespace(
-    n_epochs=200,
+    n_epochs=10000,
     batch_size=16,
-    lr=0.0002,
+    lr=0.000002,
     b1=0.5,
     b2=0.999,
     n_cpu=8,
     latent_dim=100,
     img_size=84, # <- HIER EINSTELLEN
     img_width=63, # <- HIER EINSTELLEN
-    channels=3,
+    channels=1,
     sample_interval=400,
 )
 print(opt)
@@ -209,4 +211,4 @@ for epoch in range(opt.n_epochs):
 
         batches_done = epoch * len(dataloader) + i
         if batches_done % opt.sample_interval == 0:
-            save_image(gen_imgs.data[:25], "images/%d.png" % batches_done, nrow=5, normalize=True)
+            save_image(gen_imgs.data[:25], "predictions/%d.png" % batches_done, nrow=5, normalize=True)
