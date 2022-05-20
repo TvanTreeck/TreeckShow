@@ -23,10 +23,10 @@ def run(imgs_path="Images", feats_path="Features", target_shape=(3, 84, 63)):
         scale_factor = target_shape[1] / image.shape[1]
         image = torch.nn.functional.interpolate(image.unsqueeze(0).float(), scale_factor=scale_factor,
                                                 mode="bilinear").int().squeeze()
+        if target_shape[0] == 1:
+            image = image.float().mean(0).int().unsqueeze(0)
 
-        image = image.float().mean(0).int().unsqueeze(0)
         feat = file.lower().replace(".jpg", ".pt")
-
         print("progress:", findex / len(files), image.shape, target_shape, image.shape == target_shape, end="\r")
         if image.shape == target_shape:
             torch.save(image, os.path.join(feats_path, feat))
@@ -40,17 +40,12 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description='Prepare data. Precompute Features')
-    parser.add_argument('--imgs_path', type=str, help='path to image foler')
-    parser.add_argument('--feats_path', type=str, help='path to feature foler')
+    parser.add_argument('--imgs_path', type=str, default="Images", help='path to image foler')
+    parser.add_argument('--feats_path', type=str, default="Features", help='path to feature foler')
     parser.add_argument("--img_size", type=int, default=84, help="size of each image dimension")
     parser.add_argument("--img_width", type=int, default=63, help="size of each image dimension")
-    parser.add_argument("--no_color", action="store_true", help="size of each image dimension")
+    parser.add_argument("--channels", type=int, default=1, help="number of image channels")
     args = parser.parse_args()
 
-    if args.no_color:
-        d=1
-    else:
-        d=3
-
-    target_shape = (d, args.img_size, args.img_width)
+    target_shape = (args.channels, args.img_size, args.img_width)
     run(args.imgs_path, args.feats_path, target_shape)

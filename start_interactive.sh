@@ -1,1 +1,1 @@
-docker run -it -v /Users/lukaswidowski/Documents/GitHub/TreeckShow:/app -w /app treeckshow /bin/bash
+docker run -it -v $PWD:/app -w /app treeckshow /bin/bash
