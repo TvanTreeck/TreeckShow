@@ -15,7 +15,7 @@ https://docs.docker.com/get-docker/
 
 ## go to the project directory
 ```
-cd /path/to/your/directory
+cd /path/to/your/TreeckShow
 ```
 
 ## build image 
