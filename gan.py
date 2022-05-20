@@ -1,18 +1,15 @@
 import argparse
 import os
 import numpy as np
-import math
-import pandas as pd 
-from torchvision.io import read_image
-import torchvision.transforms as transforms
+import pandas as pd
+
 from torchvision.utils import save_image
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
-from torchvision import datasets
 from torch.autograd import Variable
 
 import torch.nn as nn
-import torch.nn.functional as F
+
 import torch
 
 os.makedirs("images", exist_ok=True)
@@ -147,8 +144,8 @@ class CustomImageDataset(Dataset):
         image = torch.load(img_path)
         return image
 
-img_filelist = os.path.join("F:", "filelist_feats.txt")
-dataset = CustomImageDataset(img_filelist, "F:\\Features")
+img_filelist = os.path.join("Features", "filelist_feats.txt")
+dataset = CustomImageDataset(img_filelist, "Features")
 dataloader = DataLoader(dataset, batch_size=opt.batch_size, shuffle=True)
 
 # Optimizers
