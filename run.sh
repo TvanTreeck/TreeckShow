@@ -1,10 +1,12 @@
-python3 prepare_data.py \
-  --imgs_path="images" \
-  --img_size=84 \
-  --img_width=63 \
-  --channels=1   
+python download_pretrained_model.py
 
-python gan.py \
-  --img_size=84 \
-  --img_width=63 \
-  --channels=1
+python prepare_data.py \
+  --imgs_path="images" \
+  --img_size=128 \
+  --img_width=128 \
+  --channels=3
+
+python train.py \
+  --img_size=128 \
+  --img_width=128 \
+  --channels=3

@@ -1,0 +1,1 @@
+docker run -it -d -v $PWD:/app -w /app treeckshow bash run.sh

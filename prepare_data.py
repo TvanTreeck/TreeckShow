@@ -20,6 +20,14 @@ def run(imgs_path="Images", feats_path="Features", target_shape=(3, 84, 63)):
             continue
         filepath = os.path.join(imgs_path, file)
         image = read_image(filepath)
+
+        if target_shape[1]==target_shape[2]:
+            min_image_len = min([image.shape[1], image.shape[2]])
+            img_sh_1_start = int((image.shape[1] - min_image_len)/2)
+            img_sh_2_start = int((image.shape[2] - min_image_len) / 2)
+            image = image[:, img_sh_1_start: img_sh_1_start + min_image_len, :]
+            image = image[:, :, img_sh_2_start: img_sh_2_start + min_image_len]
+
         scale_factor = target_shape[1] / image.shape[1]
         image = torch.nn.functional.interpolate(image.unsqueeze(0).float(), scale_factor=scale_factor,
                                                 mode="bilinear").int().squeeze()
@@ -28,6 +36,8 @@ def run(imgs_path="Images", feats_path="Features", target_shape=(3, 84, 63)):
 
         feat = file.lower().replace(".jpg", ".pt")
         print("progress:", findex / len(files), image.shape, target_shape, image.shape == target_shape, end="\r")
+
+
         if image.shape == target_shape:
             torch.save(image, os.path.join(feats_path, feat))
             feats.append(feat)

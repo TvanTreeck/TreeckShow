@@ -39,6 +39,7 @@ bash start_interactive.sh
   ```
   images will be resampled according to `img_size` and `img_width` 
   `channels=1` for black-white `channels=3` for color
+- 
 ## run
 ```
 bash run.sh
