@@ -19,7 +19,7 @@ https://docs.docker.com/get-docker/
   - type "terminal" 
   - Enter
 
-## go to the project directory
+## go to the TreeckShow directory
 ```
 cd /path/to/your/TreeckShow
 ```
