@@ -3,6 +3,12 @@
 
 # How to 
 
+## download repository
+- i.e.
+  - on https://github.com/TvanTreeck/TreeckShow
+  - in upper'ish, right'ish corner 
+  - click code -> download ZIP 
+
 ## install docker 
 https://docs.docker.com/get-docker/
 
@@ -20,12 +26,12 @@ cd /path/to/your/TreeckShow
 
 ## build image 
 ```
-bash build_image.sh
+bash scripts/build_image.sh
 ```
 
 ## start container 
 ```
-bash start_interactive.sh
+bash scripts/start_interactive.sh
 ```
 
 ## configure 
@@ -42,5 +48,5 @@ bash start_interactive.sh
 - 
 ## run
 ```
-bash run.sh
+bash scripts/run.sh
 ```

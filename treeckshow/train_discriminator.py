@@ -108,7 +108,7 @@ def accuracy(prediction, labels):
 
     return (pred==labels).sum()/len(labels), (tp, tn, fp, fn)
 
-img_filelist = os.path.join("discriminator_features", "fake", "filelist_feats.txt")
+img_filelist = os.path.join("fake_Features", "filelist_feats.txt")
 dataset = CustomImageLabelDataset(img_filelist)
 dataloader = DataLoader(dataset, batch_size=opt.batch_size, shuffle=True)
 
@@ -152,3 +152,5 @@ for epoch in range(opt.n_epochs):
         batches_done = epoch * len(dataloader) + i
         if batches_done % opt.ckpt_interval == 0:
             torch.save(discriminator.state_dict(), f"models/discriminator_{batches_done}.pt")
+
+torch.save(discriminator.state_dict(), f"models/discriminator.pt")
