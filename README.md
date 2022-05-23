@@ -36,7 +36,7 @@ bash scripts/start_interactive.sh
 
 ## configure 
 
-- open run.sh with texteditor
+- open `scripts/run.s` with any texteditor
   - set 
   ```
     --img_size=84 \
@@ -44,6 +44,7 @@ bash scripts/start_interactive.sh
     --channels=1
   ```
   images will be resampled according to `img_size` and `img_width` 
+
   `channels=1` for black-white `channels=3` for color
 - 
 ## run
