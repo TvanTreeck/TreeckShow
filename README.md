@@ -3,7 +3,7 @@
 
 # How to 
 
-## download repository
+## download TreeckShow repository
 - i.e.
   - on https://github.com/TvanTreeck/TreeckShow
   - in upper'ish, right'ish corner 
