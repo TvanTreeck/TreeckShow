@@ -22,7 +22,7 @@ parser.add_argument("--latent_dim", type=int, default=100, help="dimensionality 
 parser.add_argument("--img_size", type=int, default=128, help="size of each image dimension")
 parser.add_argument("--img_width", type=int, default=128, help="size of each image dimension")
 parser.add_argument("--channels", type=int, default=3, help="number of image channels")
-parser.add_argument("--ckpt_interval", type=int, default=50, help="interval betwen ckpts")
+parser.add_argument("--ckpt_interval", type=int, default=500, help="interval betwen ckpts")
 opt = parser.parse_args()
 
 print(opt)

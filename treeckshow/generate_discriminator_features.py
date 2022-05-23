@@ -1,6 +1,9 @@
-import pandas as pd
+import os
+import sys
+sys.path.append(os.getcwd())
 
-from gan import GAN
+import pandas as pd
+from treeckshow.gan import GAN
 import os
 import torch
 
@@ -26,7 +29,7 @@ def generate(
 
         images = gan.inference(batch_size)
         for iindex, image in enumerate(images):
-            print("GENERATE DISCRIMINATOR FEATURES:", "batch:", bindex+1, "of", n_batches, "image:", iindex+1, "of", batch_size)
+            print("GENERATE DISCRIMINATOR FEATURES:", "batch:", bindex+1, "of", n_batches, "image:", iindex+1, "of", batch_size, end="\r")
             path = os.path.join(target_path, f"image_{bindex}_{iindex}.pt")
             torch.save(image, path)
             fake_features["files"].append(path)

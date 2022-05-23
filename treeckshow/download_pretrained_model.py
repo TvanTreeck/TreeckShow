@@ -1,7 +1,9 @@
-import torch
 import os
+import sys
+sys.path.append(os.getcwd())
+
+import torch
 from pytorch_pretrained_gans.BigGAN import make_biggan
-import matplotlib.pyplot as plt
 
 # Sample a class-conditional image from BigGAN with default resolution 256
 gan_type='biggan-deep-128'

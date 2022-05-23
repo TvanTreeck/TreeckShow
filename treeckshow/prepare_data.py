@@ -1,12 +1,10 @@
 import os
-import matplotlib.pyplot as plt
+import sys
+sys.path.append(os.getcwd())
+
 from torchvision.io import read_image
 import torch
 import pandas as pd
-
-#imgs_path = "Images"
-#feats_path = "Features"
-#target_shape = (3, 84, 63) # <- HIER EINSTELLEN z.b. (3, 504, 378), (3, 252, 189),(3, 84, 63)
 
 def run(imgs_path="Images", feats_path="Features", target_shape=(3, 84, 63)):
     feats = []
@@ -31,9 +29,11 @@ def run(imgs_path="Images", feats_path="Features", target_shape=(3, 84, 63)):
         scale_factor = target_shape[1] / image.shape[1]
         image = torch.nn.functional.interpolate(image.unsqueeze(0).float(), scale_factor=scale_factor,
                                                 mode="bilinear").int().squeeze()
+
         if target_shape[0] == 1:
             image = image.float().mean(0).int().unsqueeze(0)
 
+        image = image / 255 * 2 - 1
         feat = file.lower().replace(".jpg", ".pt")
         print("PREPARE DATA:","progress:", findex / len(files), image.shape, target_shape, image.shape == target_shape, end="\r")
 

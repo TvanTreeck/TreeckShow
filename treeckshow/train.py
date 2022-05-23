@@ -1,5 +1,8 @@
-import argparse
 import os
+import sys
+sys.path.append(os.getcwd())
+
+import argparse
 import numpy as np
 import pandas as pd
 
@@ -7,7 +10,7 @@ from torchvision.utils import save_image
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 from torch.autograd import Variable
-from gan import GAN
+from treeckshow.gan import GAN
 import torch.nn as nn
 
 import torch
@@ -26,6 +29,7 @@ parser.add_argument("--img_size", type=int, default=128, help="size of each imag
 parser.add_argument("--img_width", type=int, default=128, help="size of each image dimension")
 parser.add_argument("--channels", type=int, default=3, help="number of image channels")
 parser.add_argument("--sample_interval", type=int, default=1, help="interval betwen image samples")
+parser.add_argument("--ckpt_interval", type=int, default=50, help="interval betwen ckpts")
 opt = parser.parse_args()
 
 print(opt)
@@ -55,7 +59,7 @@ class Discriminator(nn.Module):
 
 gan = GAN(
     config_path="models/biggan-deep-128_config.json",
-    model_path="models/biggan-deep-128_pretrained_model.pth.tar"
+    model_path="models/biggan-deep-128_pretrained_model.pt"
 )
 
 generator = gan.G 
@@ -68,9 +72,8 @@ adversarial_loss = torch.nn.BCELoss()
 # Initialize generator and discriminator
 #generator = Generator()
 discriminator = Discriminator()
-if os.path.isfile("models/discriminator.pt"):
-    state_dict = torch.load("models/discriminator.pt", map_location='cpu' if not torch.cuda.is_available() else None)
-    discriminator.load_state_dict(state_dict)
+state_dict = torch.load("models/discriminator.pt", map_location='cpu' if not torch.cuda.is_available() else None)
+discriminator.load_state_dict(state_dict)
 
 if cuda:
     generator.cuda()
@@ -155,7 +158,7 @@ for epoch in range(opt.n_epochs):
 
         batches_done = epoch * len(dataloader) + i
         if batches_done % opt.sample_interval == 0:
-            save_image(gen_imgs.data[:25], "predictions/%d.png" % batches_done, nrow=5, normalize=True)
+            save_image((gen_imgs.data[:25] + 1) / 2, "predictions/%d.png" % batches_done, nrow=5, normalize=True)
 
         if batches_done % opt.ckpt_interval == 0:
             torch.save(discriminator.state_dict(), f"models/discriminator_step2_{batches_done}.pt")
