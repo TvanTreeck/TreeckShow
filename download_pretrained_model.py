@@ -6,13 +6,16 @@ import matplotlib.pyplot as plt
 # Sample a class-conditional image from BigGAN with default resolution 256
 gan_type='biggan-deep-128'
 
-if not os.path.isfile("models/"+gan_type+"_pretrained_model.pth.tar"):
+if not os.path.isdir("models"):
+    os.makedirs("models")
+
+if not os.path.isfile("models/"+gan_type+"_pretrained_model.pt"):
     G = make_biggan(model_name=gan_type)
 
     state_dict  = G.G.state_dict()
     config = G.G.config
 
-    torch.save(state_dict, "models/"+gan_type+"_pretrained_model.pth.tar")
+    torch.save(state_dict, "models/"+gan_type+"_pretrained_model.pt")
 
     with open(gan_type+"_config.json", "w") as f:
         f.write(config.to_json_string())

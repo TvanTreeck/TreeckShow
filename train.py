@@ -68,9 +68,9 @@ adversarial_loss = torch.nn.BCELoss()
 # Initialize generator and discriminator
 #generator = Generator()
 discriminator = Discriminator()
-if os.path.isfile("models/best_discriminator.pth.tar"):
-    state_dist = torch.load("models/best_discriminator.pth.tar", map_location='cpu' if not torch.cuda.is_available() else None)
-    discriminator.load_state_dict(state_dist)
+if os.path.isfile("models/best_discriminator.pt"):
+    state_dict = torch.load("models/best_discriminator.pt", map_location='cpu' if not torch.cuda.is_available() else None)
+    discriminator.load_state_dict(state_dict)
 
 if cuda:
     generator.cuda()
@@ -148,7 +148,7 @@ for epoch in range(opt.n_epochs):
         d_loss = (real_loss + fake_loss) / 2
 
         if d_loss<40:
-            torch.save(discriminator.state_dict(), "models/best_discriminator.pth.tar")
+            torch.save(discriminator.state_dict(), "models/best_discriminator.pt")
 
         d_loss.backward()
         optimizer_D.step()
