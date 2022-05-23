@@ -16,8 +16,8 @@ os.makedirs("predictions", exist_ok=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--n_epochs", type=int, default=200, help="number of epochs of training")
-parser.add_argument("--batch_size", type=int, default=2, help="size of the batches")
-parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
+parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
+parser.add_argument("--lr", type=float, default=0.000002, help="adam: learning rate")
 parser.add_argument("--b1", type=float, default=0.5, help="adam: decay of first order momentum of gradient")
 parser.add_argument("--b2", type=float, default=0.999, help="adam: decay of first order momentum of gradient")
 parser.add_argument("--n_cpu", type=int, default=8, help="number of cpu threads to use during batch generation")
@@ -25,7 +25,7 @@ parser.add_argument("--latent_dim", type=int, default=100, help="dimensionality 
 parser.add_argument("--img_size", type=int, default=128, help="size of each image dimension")
 parser.add_argument("--img_width", type=int, default=128, help="size of each image dimension")
 parser.add_argument("--channels", type=int, default=3, help="number of image channels")
-parser.add_argument("--sample_interval", type=int, default=400, help="interval betwen image samples")
+parser.add_argument("--sample_interval", type=int, default=1, help="interval betwen image samples")
 opt = parser.parse_args()
 
 print(opt)
@@ -68,6 +68,9 @@ adversarial_loss = torch.nn.BCELoss()
 # Initialize generator and discriminator
 #generator = Generator()
 discriminator = Discriminator()
+if os.path.isfile("models/best_discriminator.pth.tar"):
+    state_dist = torch.load("models/best_discriminator.pth.tar", map_location='cpu' if not torch.cuda.is_available() else None)
+    discriminator.load_state_dict(state_dist)
 
 if cuda:
     generator.cuda()
@@ -143,6 +146,9 @@ for epoch in range(opt.n_epochs):
         real_loss = adversarial_loss(discriminator(real_imgs), valid)
         fake_loss = adversarial_loss(discriminator(gen_imgs.detach()), fake)
         d_loss = (real_loss + fake_loss) / 2
+
+        if d_loss<40:
+            torch.save(discriminator.state_dict(), "models/best_discriminator.pth.tar")
 
         d_loss.backward()
         optimizer_D.step()
