@@ -68,8 +68,8 @@ adversarial_loss = torch.nn.BCELoss()
 # Initialize generator and discriminator
 #generator = Generator()
 discriminator = Discriminator()
-if os.path.isfile("models/best_discriminator.pt"):
-    state_dict = torch.load("models/best_discriminator.pt", map_location='cpu' if not torch.cuda.is_available() else None)
+if os.path.isfile("models/discriminator.pt"):
+    state_dict = torch.load("models/discriminator.pt", map_location='cpu' if not torch.cuda.is_available() else None)
     discriminator.load_state_dict(state_dict)
 
 if cuda:
@@ -108,9 +108,7 @@ Tensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 
 for epoch in range(opt.n_epochs):
     for i, (imgs) in enumerate(dataloader):
-        
-        print("BILD",imgs.shape)
-    
+
         # Adversarial ground truths
         valid = Variable(Tensor(imgs.size(0), 1).fill_(1.0), requires_grad=False)
         fake = Variable(Tensor(imgs.size(0), 1).fill_(0.0), requires_grad=False)
@@ -147,17 +145,20 @@ for epoch in range(opt.n_epochs):
         fake_loss = adversarial_loss(discriminator(gen_imgs.detach()), fake)
         d_loss = (real_loss + fake_loss) / 2
 
-        if d_loss<40:
-            torch.save(discriminator.state_dict(), "models/best_discriminator.pt")
-
         d_loss.backward()
         optimizer_D.step()
 
         print(
-            "[Epoch %d/%d] [Batch %d/%d] [D loss: %f] [G loss: %f]"
+            "TRAIN GAN", "[Epoch %d/%d] [Batch %d/%d] [D loss: %f] [G loss: %f]"
             % (epoch, opt.n_epochs, i, len(dataloader), d_loss.item(), g_loss.item())
         )
 
         batches_done = epoch * len(dataloader) + i
         if batches_done % opt.sample_interval == 0:
             save_image(gen_imgs.data[:25], "predictions/%d.png" % batches_done, nrow=5, normalize=True)
+
+        if batches_done % opt.ckpt_interval == 0:
+            torch.save(discriminator.state_dict(), f"models/discriminator_step2_{batches_done}.pt")
+
+        if batches_done % opt.ckpt_interval == 0:
+            torch.save(generator.state_dict(), f"models/generator_{batches_done}.pt")

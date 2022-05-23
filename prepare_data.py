@@ -35,7 +35,7 @@ def run(imgs_path="Images", feats_path="Features", target_shape=(3, 84, 63)):
             image = image.float().mean(0).int().unsqueeze(0)
 
         feat = file.lower().replace(".jpg", ".pt")
-        print("progress:", findex / len(files), image.shape, target_shape, image.shape == target_shape, end="\r")
+        print("PREPARE DATA:","progress:", findex / len(files), image.shape, target_shape, image.shape == target_shape, end="\r")
 
 
         if image.shape == target_shape:

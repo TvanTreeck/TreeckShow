@@ -3,3 +3,9 @@
 *.pt
 *.npy
 *.txt
+
+Features/*
+images/*
+models/*
+predictions/*
+discriminator_features/*

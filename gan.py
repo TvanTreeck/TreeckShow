@@ -1,9 +1,14 @@
 from pytorch_pretrained_gans import BigGAN
 import torch
 import matplotlib.pyplot as plt
+import os
 
 class GAN:
-    def __init__(self, config_path="models/config.json", model_path="models/pretrained_model.pth.tar"):
+    def __init__(
+            self,
+            config_path="models/biggan-deep-128_config.json",
+            model_path="models/biggan-deep-128_pretrained_model.pt"
+    ):
         self.config = BigGAN.config.BigGANConfig()
         self.config = self.config.from_json_file(config_path)
 
@@ -18,16 +23,20 @@ class GAN:
         latent = self.G.sample_latent(batch_size=n)
         return cls, latent
 
-    def inference(self, plot=False, plot_path="plot.png"):
-        cls, latent = self. sample_generator_input(1)
-        image = self.G(z=latent, y=cls)
-        image = image.squeeze(0).transpose(1,0).transpose(2,1).detach().numpy()
-
-        if plot:
-            plt.figure()
-            plt.imshow(image)
-            plt.savefig(plot_path)
+    def inference(self, n=1, plot=False, plot_path=""):
+        cls, latent = self. sample_generator_input(n)
+        images = self.G(z=latent, y=cls)
+        for index, image in enumerate(images):
+            image = image.transpose(1,0).transpose(2,1).detach().numpy()
+            if plot:
+                plt.figure()
+                plt.imshow(image)
+                plt.savefig(os.path.join(plot_path, f"plot_{index}.png"))
+        return images
 
 if __name__ == "__main__":
-    gan = GAN(config_path="models/config.json", model_path="models/pretrained_model.pth.tar")
-    gan.inference(plot=True)
+    gan = GAN(
+        config_path="models/biggan-deep-128_config.json",
+        model_path="models/biggan-deep-128_pretrained_model.pth.tar"
+    )
+    gan.inference(1, plot=True)
