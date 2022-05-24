@@ -164,4 +164,4 @@ for epoch in range(opt.n_epochs):
             torch.save(discriminator.state_dict(), f"models/discriminator_step2_{batches_done}.pt")
 
         if batches_done % opt.ckpt_interval == 0:
-            torch.save(generator.state_dict(), f"models/generator_{batches_done}.pt")
+            torch.save(generator.G.state_dict(), f"models/generator_{batches_done}.pt")
