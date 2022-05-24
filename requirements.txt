@@ -1,0 +1,7 @@
+pandas
+matplotlib
+numpy
+
+git+https://github.com/lukemelas/pytorch-pretrained-gans
+boto3
+Scipy
