@@ -19,7 +19,8 @@ def count_dataset_size(feature_dir):
 def generate(
         n = 1,
         batch_size = 1,
-        target_path = "fake_Features"
+        target_path = "fake_Features",
+        sample_mode = "sample"
     ):
     os.makedirs(target_path, exist_ok=True)
     gan = GAN()
@@ -27,7 +28,7 @@ def generate(
     fake_features = {"files": []}
     for bindex in range(n_batches):
 
-        images = gan.inference(batch_size)
+        images = gan.inference(batch_size, cls_mode=sample_mode)
         for iindex, image in enumerate(images):
             print("GENERATE DISCRIMINATOR FEATURES:", "batch:", bindex+1, "of", n_batches, "image:", iindex+1, "of", batch_size, end="\r")
             path = os.path.join(target_path, f"image_{bindex}_{iindex}.pt")
@@ -44,10 +45,11 @@ if __name__ == "__main__":
     parser.add_argument('--batch_size', type=int, default=1, help='batch size')
     parser.add_argument('--feats_path', type=str, default="Features", help='path to feature foler')
     parser.add_argument("--target_path", type=str, default="fake_Features", help="path to saved features")
+    parser.add_argument("--sample_mode", type=str, default="samples", help="mode of sampling, type class index for train on specific class")
     args = parser.parse_args()
 
     n, real_features = count_dataset_size(feature_dir=args.feats_path)
-    fake_features = generate(n=n, batch_size=args.batch_size, target_path=args.target_path)
+    fake_features = generate(n=n, batch_size=args.batch_size, target_path=args.target_path, sample_mode=args.sample_mode)
     df = pd.concat(
         [pd.DataFrame(real_features),
         pd.DataFrame(fake_features)]
