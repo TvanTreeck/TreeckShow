@@ -1,4 +1,7 @@
 import os
+import sys
+sys.path.append(os.getcwd())
+
 from treeckshow.gan import GAN
 
 def init_inference(class_index, model_path, plot_path):
