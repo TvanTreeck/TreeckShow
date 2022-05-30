@@ -11,8 +11,8 @@ def init_inference(class_index, model_path, plot_path):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='Test Generators')
-    parser.add_argument('--path', type=str, default=".", help='path to checkpoints')
-    parser.add_argument('--plot_path', type=str, default=".", help='path to ouput images')
+    parser.add_argument('--path', type=str, default="models", help='path to checkpoints')
+    parser.add_argument('--plot_path', type=str, default="images", help='path to ouput images')
     parser.add_argument('--class_index', type=str, default="1", help='class_index')
     args = parser.parse_args()
 
