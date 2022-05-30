@@ -35,7 +35,7 @@ class GAN:
         return cls, latent
 
     def inference(self, n=1, plot=False, plot_path="", cls_mode="sample", prefix="plot"):
-        cls, latent = self. sample_generator_input(n, cls_mode)
+        cls, latent = self.sample_generator_input(n, cls_mode)
         images = self.G(z=latent, y=cls)
         for index, image in enumerate(images):
             image = (image.transpose(1,0).transpose(2,1).detach().numpy() + 1) / 2
