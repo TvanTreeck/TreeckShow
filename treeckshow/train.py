@@ -30,6 +30,7 @@ parser.add_argument("--img_width", type=int, default=128, help="size of each ima
 parser.add_argument("--channels", type=int, default=3, help="number of image channels")
 parser.add_argument("--sample_interval", type=int, default=5, help="interval betwen image samples")
 parser.add_argument("--ckpt_interval", type=int, default=100, help="interval betwen ckpts")
+parser.add_argument("--sample_mode", type=str, default="samples", help="mode of sampling, type class index for train on specific class")
 opt = parser.parse_args()
 
 print(opt)
@@ -126,7 +127,7 @@ for epoch in range(opt.n_epochs):
         optimizer_G.zero_grad()
 
         # Sample noise as generator input
-        cls, latent = gan.sample_generator_input(imgs.shape[0])
+        cls, latent = gan.sample_generator_input(imgs.shape[0], mode=opt.sample_mode)
 
         # Generate a batch of images
         gen_imgs = generator(z=latent, y=cls)
