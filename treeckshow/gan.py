@@ -42,7 +42,11 @@ class GAN:
             if plot:
                 plt.figure()
                 plt.imshow(image)
-                plt.savefig(os.path.join(plot_path, f"{prefix}_{index}.png"))
+                if ".png" in plot_path or ".jpg" in plot_path:
+                    ppath = plot_path
+                else:
+                    ppath = os.path.join(plot_path, f"{prefix}_{index}.png")
+                plt.savefig(ppath)
         return images
 
     def plot_classes(self):
