@@ -27,4 +27,4 @@ if __name__ == "__main__":
         print(f, "progress",  i/len(files))
         model_path = os.path.join(args.model_path, f)
         image_path = os.path.join(args.plot_path, f.replace(".pt", ".png"))
-        init_inference(class_index=args.class_index, model_path=args.model_path, plot_path=args.plot_path)
+        init_inference(class_index=args.class_index, model_path=model_path, plot_path=image_path)
