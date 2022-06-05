@@ -12,7 +12,7 @@ python treeckshow/prepare_data.py \
 echo "GENERATE DISCRIMINATOR FEATS"
 python treeckshow/generate_discriminator_features.py \
   --model_size=128 \
-  --sample_mode=1 # sample für alle classen, classen index (zahl) für eine classe
+  --sample_mode=sample
 
 echo "TRAIN DISCRIMINATOR"
 python treeckshow/train_discriminator.py \
@@ -22,7 +22,7 @@ python treeckshow/train_discriminator.py \
 
 echo "TRAIN GENERATOR"
 python treeckshow/train.py \
-  --sample_mode="1" \
   --img_size=128 \
   --img_width=128 \
-  --channels=3 
+  --channels=3  \
+  --sample_mode=1  # sample für alle classen, classen index (zahl) für eine classe

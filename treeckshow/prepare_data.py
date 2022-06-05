@@ -22,7 +22,7 @@ def run(imgs_path="Images", feats_path="Features", target_shape=(3, 84, 63)):
         except:
             print("read_image failed", filepath)
             continue
-            
+
         if target_shape[1]==target_shape[2]:
             min_image_len = min([image.shape[1], image.shape[2]])
             img_sh_1_start = int((image.shape[1] - min_image_len)/2)
