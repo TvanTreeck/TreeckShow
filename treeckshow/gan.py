@@ -59,8 +59,8 @@ class GAN:
 
 if __name__ == "__main__":
     gan = GAN(
-        config_path="models/biggan-deep-128_config.json",
-        model_path="models/biggan-deep-128_pretrained_model.pt"
+        config_path="models/biggan-deep-256_config.json",
+        model_path="models/biggan-deep-256_pretrained_model.pt"
     )
     gan.inference(1, plot=True)
     gan.plot_classes()
