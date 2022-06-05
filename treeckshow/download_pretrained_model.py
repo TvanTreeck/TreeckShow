@@ -6,7 +6,7 @@ import torch
 from pytorch_pretrained_gans.BigGAN import make_biggan
 
 # Sample a class-conditional image from BigGAN with default resolution 256
-gan_type='biggan-deep-256'
+gan_type=f'biggan-deep-{sys.argv[1]}'
 
 if not os.path.isdir("models"):
     os.makedirs("models")

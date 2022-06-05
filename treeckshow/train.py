@@ -59,8 +59,8 @@ class Discriminator(nn.Module):
         return validity
 
 gan = GAN(
-    config_path="models/biggan-deep-256_config.json",
-    model_path="models/biggan-deep-256_pretrained_model.pt"
+    config_path=f"models/biggan-deep-{opt.img_size}_config.json",
+    model_path=f"models/biggan-deep-{opt.img_size}_pretrained_model.pt"
 )
 
 generator = gan.G 

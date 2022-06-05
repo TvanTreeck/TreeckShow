@@ -20,10 +20,14 @@ def generate(
         n = 1,
         batch_size = 1,
         target_path = "fake_Features",
-        sample_mode = "sample"
+        sample_mode = "sample",
+        model_size="128"
     ):
     os.makedirs(target_path, exist_ok=True)
-    gan = GAN()
+    gan = GAN(
+        config_path=f"models/biggan-deep-{model_size}_config.json",
+        model_path=f"models/biggan-deep-{model_size}_pretrained_model.pt"
+    )
     n_batches = n // batch_size
     fake_features = {"files": []}
     for bindex in range(n_batches):
@@ -46,10 +50,12 @@ if __name__ == "__main__":
     parser.add_argument('--feats_path', type=str, default="Features", help='path to feature foler')
     parser.add_argument("--target_path", type=str, default="fake_Features", help="path to saved features")
     parser.add_argument("--sample_mode", type=str, default="samples", help="mode of sampling, type class index for train on specific class")
+    parser.add_argument("--model_size", type=str, default="128", help="size of the pretrained model")
+
     args = parser.parse_args()
 
     n, real_features = count_dataset_size(feature_dir=args.feats_path)
-    fake_features = generate(n=n, batch_size=args.batch_size, target_path=args.target_path, sample_mode=args.sample_mode)
+    fake_features = generate(n=n, batch_size=args.batch_size, target_path=args.target_path, sample_mode=args.sample_mode, model_size=args.model_size)
     df = pd.concat(
         [pd.DataFrame(real_features),
         pd.DataFrame(fake_features)]
